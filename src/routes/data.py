@@ -5,7 +5,9 @@ from controllers import DataController, ProjectController, ProcessController
 from models import ResponseSignal, ProjectModel
 from routes import ProcessRequest
 from models.ChunkModel import ChunkModel
-from models.db_schemas import DataChunk
+from models.AssetModel import AssetModel
+from models.db_schemas import DataChunk, Asset
+from models.enums.AssetTypeEnums import AssetTypeEnums
 import aiofiles
 import os
 import logging
@@ -56,11 +58,25 @@ async def upload_data(request: Request, project_id: str, file: UploadFile,
                 "signal": ResponseSignal.FILE_UPLOAD_FAILED.value
             }
         )
+    
+    # store the assets into the database
+    asset_model = await AssetModel.create_instance(
+        db_client=request.app.db_client
+    )
+
+    asset_resource = Asset(
+        asset_project_id=project.id,
+        asset_type=AssetTypeEnums.FILE.value,
+        asset_name=file_id,
+        asset_size=os.path.getsize(file_path)
+    )
+
+    asset_record = await asset_model.create_asset(asset=asset_resource)
 
     return JSONResponse(
             content={
                 "signal": ResponseSignal.FILE_UPLOAD_SUCCESS.value,
-                "file_id": file_id
+                "file_id": str(asset_record.id),
             }
         )
 
