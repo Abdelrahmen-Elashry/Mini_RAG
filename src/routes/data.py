@@ -97,9 +97,13 @@ async def process_endpoint(request: Request, project_id: str, process_request: P
         project_id=project_id
     )
 
+    asset_model = await AssetModel.create_instance(
+            db_client=request.app.db_client
+        )
+
     project_files_ids = {}
     if process_request.file_id:
-        asset_record = await AssetModel.get_asset_record(
+        asset_record = await asset_model.get_asset_record(
             asset_project_id=project.id,
             asset_name=process_request.file_id
         )
@@ -117,9 +121,7 @@ async def process_endpoint(request: Request, project_id: str, process_request: P
         }
     
     else:
-        
-
-        project_files = await AssetModel.get_all_project_assets(
+        project_files = await asset_model.get_all_project_assets(
             asset_project_id=project.id,
             asset_type=AssetTypeEnums.FILE.value,
         )
