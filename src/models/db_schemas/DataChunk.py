@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import Optional
 from bson.objectid import ObjectId
 
@@ -12,7 +12,7 @@ class DataChunk(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-    
+
     @classmethod
     def get_indexes(cls):
         return [
@@ -24,3 +24,7 @@ class DataChunk(BaseModel):
                 "unique": False
             }
         ]
+    
+class RetrievedDocument(BaseModel):
+    text: str
+    score: float
