@@ -23,6 +23,7 @@ class CoHereProvider(LLMInterface):
 
         self.client = cohere.Client(api_key=self.api_key)
 
+        self.enums = CoHereEnums
         self.logger = logging.getLogger(__name__)
 
     def set_generation_model(self, model_id: str):
@@ -72,9 +73,7 @@ class CoHereProvider(LLMInterface):
             self.logger.error("Embedding model for CoHere was not set")
             return None
         
-        input_type = CoHereEnums.DOCUMENT
-        if document_type == DocumentTypeEnum.QUERY:
-            input_type = CoHereEnums.QUERY
+        input_type = self._resolve_task_type(document_type)
 
         response = self.client.embed(
             model = self.embedding_model_id,
@@ -94,3 +93,8 @@ class CoHereProvider(LLMInterface):
             "role": role,
             "text": self.process_text(prompt)
         }
+
+    def _resolve_task_type(self, document_type: str) -> str:
+        if document_type == DocumentTypeEnum.QUERY.value:
+            return CoHereEnums.QUERY.value
+        return CoHereEnums.DOCUMENT.value
