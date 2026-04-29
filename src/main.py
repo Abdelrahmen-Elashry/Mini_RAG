@@ -5,8 +5,11 @@ from helpers.config import get_settings
 from stores.llm.LLMProviderFactory import LLMProviderFactory
 from stores.vectordb.VectorDBProviderFactory import VectorDBProviderFactory
 from stores.llm.templates.template_parser import TemplateParser
+from utils.metrics import setup_metrics
 
 app = FastAPI()
+
+setup_metrics(app)
 
 async def startup_span():
     settings = get_settings()
