@@ -1,7 +1,7 @@
 services:
   mongodb:
-    image: mongo:8.2.6-rc0
-    container_name: my_first_container
+    image: mongo:8.2.7
+    container_name: mongodb
     ports:
       - "27077:27017"
     volumes:
