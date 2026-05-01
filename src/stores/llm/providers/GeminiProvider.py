@@ -112,7 +112,7 @@ class GeminiProvider(LLMInterface):
         """
         return types.Content(
             role=role,
-            parts=[types.Part(text=self.process_text(prompt))]
+            parts=[types.Part(text=prompt)]
         )
 
     def _resolve_task_type(self, document_type: str) -> str:
