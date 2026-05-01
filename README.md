@@ -6,6 +6,13 @@ This is a modest RAG project supervised by Eng. Abu Bakr Soliman
 
 - Python 3.12
 
+#### Install Dependencies
+
+```bash
+sudo apt update
+sudo apt install libpq-dev gcc python3-dev
+```
+
 #### Install Python using Miniconda
 
 1) Download and install MiniConda from [here](https://docs.anaconda.com/free/miniconda/#quick-command-line-install)
