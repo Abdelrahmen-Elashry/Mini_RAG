@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import List
 # BaseSettings designed specifically for environment variables
 
 class Settings(BaseSettings):
@@ -24,16 +25,20 @@ class Settings(BaseSettings):
     COHERE_API_KEY: str = None
     GEMINI_API_KEY: str = None
 
+    GENERATION_MODEL_ID_LITERAL: List[str] = None
     GENERATION_MODEL_ID: str = None
     EMBEDDING_MODEL_ID: str = None
+    EMBEDDING_MODEL_ID_LITERAL: List[str] = None
     EMBEDDING_MODEL_SIZE: int = None
     INPUT_DAFAULT_MAX_CHARACTERS: int = None
     GENERATION_DAFAULT_MAX_TOKENS: int = None
     GENERATION_DAFAULT_TEMPERATURE: float = None
     
+    VECTOR_DB_BACKEND_LITERAL: List[str] = None
     VECTOR_DB_BACKEND : str
     VECTOR_DB_PATH : str
     VECTOR_DB_DISTANCE_METHOD: str = None
+    VECTOR_DB_PGVEC_INDEX_THRESHOLD: int = 100
 
     PRIMARY_LANG: str = "ar"
     DEFAULT_LANG: str = "en"

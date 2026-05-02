@@ -1,8 +1,9 @@
 from ..LLMInterface import LLMInterface
 from ..LLMEnums import GeminiEnums, DocumentTypeEnum
+from stores.llm.templates.template_parser import TemplateParser
+from typing import List, Union
 from google import genai
 from google.genai import types
-from stores.llm.templates.template_parser import TemplateParser
 
 import logging
 
@@ -81,11 +82,14 @@ class GeminiProvider(LLMInterface):
 
         return response.text
 
-    def embed_text(self, text: str, document_type: str = None):
+    def embed_text(self, text: Union[str, List[str]], document_type: str = None):
 
         if not self.embedding_model_id:
             self.logger.error("Embedding model for Gemini was not set — call set_embedding_model() first")
             return None
+        
+        if isinstance(text, str):
+            text = [text]
 
         # Map DocumentTypeEnum values to Gemini task_type strings
         task_type = self._resolve_task_type(document_type)
@@ -93,7 +97,7 @@ class GeminiProvider(LLMInterface):
         try:
             response = self.client.models.embed_content(
                 model=self.embedding_model_id,
-                contents=self.process_text(text),
+                contents=[self.process_text(t) for t in text],
                 config=types.EmbedContentConfig(task_type=task_type),
             )
         except Exception as e:
@@ -104,7 +108,7 @@ class GeminiProvider(LLMInterface):
             self.logger.error("No embedding returned from Gemini")
             return None
 
-        return response.embeddings[0].values
+        return [rec.values for rec in response.embeddings]
 
     def construct_prompt(self, prompt: str, role: str):
         """
