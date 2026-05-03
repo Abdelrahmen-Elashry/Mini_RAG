@@ -48,6 +48,12 @@ $ cp .env.example .env
 
 Set your environment variables in the `.env` file. Like `OPENAI_API_KEY` value.
 
+### Run Alembic Migration
+
+```bash
+$ alembic upgrade head
+```
+
 ## Run Docker Compose Services
 
 ```bash
